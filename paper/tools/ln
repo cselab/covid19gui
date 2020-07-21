@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -eu
+
+prefix=tile_growth
+outdir=$prefix
+mkdir -p "$outdir"
+
+for f in */growth.pdf ; do
+  name=$(dirname "$f")
+  o=$outdir/$name.pdf
+  [ -f "$o" ] || ln -srv "$f" "$o"
+done
+
+prefix=tile_samples
+outdir=$prefix
+mkdir -p "$outdir"
+
+for f in */samples.png ; do
+  name=$(dirname "$f")
+  o=$outdir/$name.png
+  [ -f "$o" ] || ln -srv "$f" "$o"
+done

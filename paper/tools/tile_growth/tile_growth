@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -eu
+
+name=growth
+out=tile_growth.pdf
+files=$(ls *.pdf | grep -v "$name" | grep -v "samples.pdf" | grep -v "tile.pdf" | xargs)
+cmd="pdfnup --nup 5x2 --outfile '$out' $files"
+echo "$cmd"
+eval "$cmd"

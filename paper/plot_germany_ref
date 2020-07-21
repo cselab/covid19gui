@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -eu
+
+d=Germany
+
+./plot_effective_growth.py --dataDir "$d" --output "$d/growth_ref.pdf" --dehning2020_dir data/dehning2020 --growth
+
+pretty=$d/_korali_samples_pretty
+./pretty_samples.py "$d/_korali_samples" "$pretty"
+python -m korali.plotter --dir "$pretty" --output "$d/samples.png" > /dev/null || true
+echo "$d/samples.png"

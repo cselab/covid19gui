@@ -1,0 +1,27 @@
+#!/bin/bash
+
+e () {
+  echo "$@"
+  eval "$@"
+}
+
+set -eu
+
+name=samples
+out=samples.png
+files=$(ls *.png | grep -v "$name" | xargs)
+
+for f in $files ; do
+  fpdf=${f%.png}.pdf
+  if [ -f "$fpdf" ] ; then
+    echo "skip existing $fpdf"
+    continue
+  fi
+  e "convert $f -set filename:fname '%t' \
+  -gravity North   -background LightGray  -splice 0x65 \
+  -pointsize 60 -annotate +0+4 '%[filename:fname]' -resize 50% $fpdf"
+done
+
+out=tile_samples.pdf
+files=$(ls *.pdf | grep -v "$out" | xargs)
+e "pdfnup --nup 5x2 --papersize '{5cm,10cm}' --outfile '$out' $files"

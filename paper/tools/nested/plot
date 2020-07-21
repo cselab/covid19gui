@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -eu
+
+# path to directory containing '_korali_samples'
+datadir=$1
+
+pretty=$datadir/_korali_samples_pretty
+./pretty_samples.py "$datadir/_korali_samples" "$pretty"
+python -m korali.plotter --dir "$pretty"  --output "$datadir/samples_pretty.png"

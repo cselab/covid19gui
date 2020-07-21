@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -eu
+
+for f in */_korali_samples ; do
+  base=${f%/*}
+  echo "$base"
+  outfile=$base/sample_params.dat
+  if [ -f "$outfile" ] ; then
+    echo "skip existing '$outfile'"
+    continue
+  fi
+  tmp=$outfile.tmp
+  ./stat_params.py "$base" > "$tmp"
+  mv "$tmp" "$outfile"
+  echo "$outfile"
+done
