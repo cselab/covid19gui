@@ -183,7 +183,7 @@ def compute_intervals(args, jskPropagation, jsData):
     for x, d in zip(varNames, derived):
         if d:
             if d[0] == 'cumsum':
-                y0 = vars[x][0, 0]
+                y0 = vars[x][0][0]
                 vars_ci[x] = compute_credible_intervals(vars[d[1]],
                                                         std,
                                                         sir.likelihood,
