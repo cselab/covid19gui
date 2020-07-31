@@ -21,7 +21,7 @@ def compute_credible_intervals(ydata,
                                like: Likelihood,
                                percentages,
                                ns,
-                               cumsum=False):
+                               cumsum=False, cumsum_initial=0):
     ydata = np.asarray(ydata)
     std = np.asarray(std)
 
@@ -49,7 +49,7 @@ def compute_credible_intervals(ydata,
         raise NotImplementedError()
 
     if cumsum:
-        samples = np.cumsum(samples, axis=1)
+        samples = cumsum_initial + np.cumsum(samples, axis=1)
 
     median = np.zeros(Nt)
     mean = np.zeros(Nt)
@@ -73,43 +73,6 @@ def compute_credible_intervals(ydata,
         local_iv['High Interval'] = list(q2)
         iv['Intervals'].append(local_iv)
 
-    return iv
-
-
-def intervals_cumsum(iv_daily, exp=2.):
-    """
-    Returns intervals computed as cumulative sum of iv.
-    """
-    iv = {}
-    iv['Intervals'] = []
-    iv['Median'] = list(np.nancumsum(iv_daily['Median']))
-    iv['Mean'] = list(np.nancumsum(iv_daily['Mean']))
-    for local_iv_daily in iv_daily['Intervals']:
-        local_iv = {}
-        p = local_iv_daily['Percentage']
-        local_iv['Percentage'] = p
-        local_iv['Low Interval'] = []
-        local_iv['High Interval'] = []
-
-        def cumsum_iv(iv, mean):
-            iv = np.array(iv)
-            mean = np.array(mean)
-            return (np.nancumsum(abs(mean - iv)**exp))**(1. / exp)
-
-        def cumsum_low(low, mean, meancum):
-            meancum = np.array(meancum)
-            return list(meancum - cumsum_iv(low, mean))
-
-        def cumsum_high(high, mean, meancum):
-            meancum = np.array(meancum)
-            return list(meancum + cumsum_iv(high, mean))
-
-        local_iv['Low Interval'] = cumsum_low(local_iv_daily['Low Interval'],
-                                              iv_daily['Mean'], iv['Mean'])
-        local_iv['High Interval'] = cumsum_high(
-            local_iv_daily['High Interval'], iv_daily['Mean'], iv['Mean'])
-
-        iv['Intervals'].append(local_iv)
     return iv
 
 
@@ -220,12 +183,14 @@ def compute_intervals(args, jskPropagation, jsData):
     for x, d in zip(varNames, derived):
         if d:
             if d[0] == 'cumsum':
+                y0 = vars[x][0, 0]
                 vars_ci[x] = compute_credible_intervals(vars[d[1]],
                                                         std,
                                                         sir.likelihood,
                                                         r,
                                                         ns=Nsp,
-                                                        cumsum=True)
+                                                        cumsum=True,
+                                                        cumsum_initial=y0)
             elif d[0] == 'diff':
                 vars_ci[x] = intervals_diff(vars_ci[d[1]])
             else:
@@ -257,3 +222,4 @@ def compute_intervals(args, jskPropagation, jsData):
             json.dump(jsIntervals, f, indent=2, sort_keys=True)
 
     return jsIntervals
+
