@@ -32,7 +32,7 @@ params_fixed = {
     'kbeta2_div_kbeta': 1,
     # distribution
     '[Sigma]': 300.,
-    '[Dispersion]': 1.5,
+    '[Dispersion]': 10.,
 }
 
 params_prior = {
@@ -59,7 +59,7 @@ params_to_infer = ['R0', 'tint', 'kbeta']
 #params_to_infer = ['R0', 'gamma', 'tint', 'kbeta']
 #params_to_infer = ['R0', 'gamma', 'tint', 'dint']
 #params_to_infer = ['R0', 'gamma', 'tint', 'kbeta', 'dint']
-params_to_infer += ['[Dispersion]']
+#params_to_infer += ['[Dispersion]']
 
 pretty_dict = {
     # 'I0': r'$I_0$',
