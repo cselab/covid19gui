@@ -227,9 +227,9 @@ def model_for_korali_sample(s, jsOde):
     dt = t[1] - t[0]
     tsolve = [t[0] - dt] + t if DAILY else t
 
-    I0 = sdict["I0"] * jsOde['Initial Condition'][1]
     N = jsOde['Population Size']
-    y0 = N - I0, I0, 0
+    y0 = np.copy(jsOde['Initial Condition'])
+    y0[1] *= sdict['I0']
 
     if libsir:
         # The C++ code computes directly N - S(t).
@@ -278,9 +278,9 @@ def model_for_korali_execute(s, jsOde):
     assert np.isclose(dt, 1)
     tsolve = t + [t[-1] + dt] if DAILY else t
 
-    I0 = sdict["I0"] * jsOde['Initial Condition'][1]
     N = jsOde['Population Size']
-    y0 = N - I0, I0, 0
+    y0 = np.copy(jsOde['Initial Condition'])
+    y0[1] *= sdict['I0']
 
     sol = solve_ivp(sir_rhs,
                     t_span=[tsolve[0], tsolve[-1]],
