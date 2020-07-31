@@ -55,11 +55,12 @@ params_prior = {
 #params_to_infer = ['R0', 'gamma', 'tint']
 #params_to_infer = ['R0', 'gamma', 'tint', 'I0']
 #params_to_infer = ['R0', 'tint', 'kbeta', 'I0']
-params_to_infer = ['R0', 'tint', 'kbeta']
+#params_to_infer = ['R0', 'tint', 'kbeta']
+params_to_infer = ['R0', 'tint', 'kbeta', 'dint']
 #params_to_infer = ['R0', 'gamma', 'tint', 'kbeta']
 #params_to_infer = ['R0', 'gamma', 'tint', 'dint']
 #params_to_infer = ['R0', 'gamma', 'tint', 'kbeta', 'dint']
-#params_to_infer += ['[Dispersion]']
+params_to_infer += ['[Dispersion]']
 
 pretty_dict = {
     # 'I0': r'$I_0$',
