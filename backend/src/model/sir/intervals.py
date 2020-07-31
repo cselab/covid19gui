@@ -130,7 +130,7 @@ def compute_intervals(args, jskPropagation, jsData):
     jsOde = sir.getReferenceData(jsData)
 
     r = args.percentages
-    Ns = min(500, args.nSamples)
+    Ns = jskPropagation['Solver']['Sample Count']
     Nsp = args.nSamplesPropagation
 
     if (args.silent == False): print('Loading files...')
