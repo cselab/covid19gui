@@ -18,16 +18,13 @@ def propagate_uncertainty(args, jskSamples, jsData):
     sir.set_custom_params(args)
     jsOde = sir.getReferenceData(jsData)
 
-    Ns = jskSamples['Solver']['Population Size']
-    Np = len(jskSamples['Samples'][0]['Parameters'])
+    Ns = min(500, jskSamples['Solver']['Population Size']) # number of samples
+    Np = len(jskSamples['Samples'][0]['Parameters']) # number of parameters
 
     db = jskSamples['Results']['Sample Database']
     p = []
     for j in range(Np):
-        tmp = []
-        for k in range(Ns):
-            tmp.append(db[k][j])
-        p.append(tmp)
+        p.append([db[k][j] for k in range(Ns)])
 
     # days of prediction = days in the data + future days
     T = jsOde['Time'][-1] + args.futureDays
